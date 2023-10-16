@@ -16,6 +16,7 @@ class Menus {
 	int menuDepth;				// How deep you are into menus
 	int menuSize;				// Amount of options in the menu
 	int userMenuChoice;			// The user's menu choice
+	CourseLinkedList& currentTree; 
 	
 	// Option three
 
@@ -56,9 +57,11 @@ public:
 
 
 	Menus(CourseLinkedList& tree) :
+		
 		runFlag(true),
 		menuDepth(0),
 		menuSize(menuOptionsString.size()),
-		userMenuChoice(0) {}
+		userMenuChoice(0),
+		currentTree(tree) {}
 
 };
