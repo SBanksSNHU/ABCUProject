@@ -5,7 +5,7 @@
 using std::cout;
 using std::endl;
 
-void CourseLinkedList::insert(CourseNode node) {
+int  CourseLinkedList::insert(CourseNode node) {
 	if (node.coursePrerequisites.empty()) {
 		root.push_back(node);
 	}
@@ -34,13 +34,16 @@ void CourseLinkedList::insert(CourseNode node) {
 					if (prerequisiteNode) {
 						// Add the current node as a child to the prerequisite node
 						prerequisiteNode->children.push_back(node);
+						return 1;
 					}
 					else { // atleast 1 prerequisite doesn't exist
 						tempNotFound.push_back(node);
+						
+						return 0;
 					}
 				}
 			}
-
+			
 			// check prerequisites if courses found in tree
 			// if found make them child,
 			// if not found
@@ -50,7 +53,9 @@ void CourseLinkedList::insert(CourseNode node) {
 			// // If prerequisites = Null, Root
 		// Search for every prerequisite and store a pointer of it in
 		}
+
 	}
+	
 }
 
 
@@ -59,7 +64,7 @@ CourseNode* CourseLinkedList::getRoot() {
 }
 
 
-// Ok look, this function creates a tree, but a forest is needed
+//Ok look, this function creates a tree, but a forest is needed
 
 
 CourseNode* CourseLinkedList::search(std::string name) {
@@ -91,12 +96,55 @@ CourseNode* CourseLinkedList::searchRe(CourseNode* startNode, std::string name) 
 
 
 
-void CourseLinkedList::printCourse(std::string name) {
+void CourseLinkedList::printCourse() {
 	// Search for the node first, assign to value
+	CourseNode* node;
+	std::string userCourse;
+	cout << "What course are you looking for?[ABC-123]" << endl;
+	std::cin >> userCourse;
+	node = search(userCourse);
+	if (node) {
+		cout << "ID: " << node->courseID << "\nName: " << node->courseName <<
+			"\nPrerequisites: ";
+		for (int i = 0; i < node->coursePrerequisites.size(); i++) {
+			cout << node->coursePrerequisites[i] << ", \n";
+		}
+
+	}
+	else {
+		cout << "Node " << userCourse << " does not exist.\n";
+	}
 
 	//CourseNode* node = search(name);
 
 
-
-
 }
+
+
+void CourseLinkedList::notFoundFix() {
+	int pick = 0;
+
+	while (!tempNotFound.empty()) {
+		CourseNode node = tempNotFound.at(pick);
+		tempNotFound.erase(tempNotFound.begin() + pick);
+		insert(node);
+		
+		
+		// remove element call, function again
+	}
+}
+
+std::vector<CourseNode> CourseLinkedList::getNotFound() {
+	return tempNotFound;
+}
+void CourseLinkedList::printAllCourses() {
+	cout << "Upcoming courses:\n";
+}
+
+
+	void CourseLinkedList::pushNode(CourseNode node) {
+		allCourses.push_back(node);
+	}
+	std::vector<CourseNode> CourseLinkedList::getAllCourses() {
+		return allCourses;
+	}

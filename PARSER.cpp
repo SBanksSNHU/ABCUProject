@@ -43,11 +43,16 @@ void readFile(CourseLinkedList &tree) { // This will also load the files into a 
 		
 		CourseNode* newNode = new CourseNode(courseID, courseName, coursePrerequisites);
 		tree.insert(*newNode);
+		tree.pushNode(*newNode);
 		
 		line = "";
 	
 
 	}
+	tree.notFoundFix();
+	// The roots are created, but we need a way to 
+	// recursively add things in from tempNotFound and 
+	// assign them the proper values
 	
 	std::cout << "File loaded!" << std::endl;
 	file.close();

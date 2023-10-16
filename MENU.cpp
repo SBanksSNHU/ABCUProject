@@ -52,25 +52,26 @@
 	}
 	void Menus::optionTwo() {
 		setMenuChoice(2);
+
+		std::vector<CourseNode> nodes = currentTree.getAllCourses();
 		if (menuDepth > 0) {
 			std::cout << "Anything Else?" << std::endl;
 		}
-		std::cout << "Sample Schedule." << std::endl; // ABC Order Printing
-
+		std::cout << "Upcoming schedule" << std::endl;
+		for (int i = 0; i < nodes.size(); i++) {
+			std::cout << nodes[i].courseID << std::endl;
+		}
+		
 		menuDepth++;
 	}
 	void Menus::optionThree() { // Print course and requirements
 		setMenuChoice(3);
-		std::string userCourse;
-		
-		std::cout << "What course a you looking for?" << std::endl;
-		std::cin >> userCourse;
-		// Search, op3s(found), print
+		currentTree.printCourse();
 
 		if (menuDepth > 0) {
 			std::cout << "Anything Else?" << std::endl;
 		}
-		
+		currentTree.printAllCourses();
 		menuDepth++;
 	}
 
