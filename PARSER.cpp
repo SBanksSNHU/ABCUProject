@@ -16,17 +16,14 @@ void readFile(CourseLinkedList &tree) { // This will also load the files into a 
 	std::getline(file, line); // Skips first line
 	
 
-	// Move back in loop if problems
 
 
-	//CourseNode* dummyNodeRoot = new CourseNode("Dumb", "Node", coursePrerequisites);
-	//tree.insert(*dummyNodeRoot);
 	while (std::getline(file, line)) {
 
 		std::string courseID;
 		std::string courseName;
 		std::vector<std::string> coursePrerequisites;
-		std::string tempPres;
+		std::string tempPres; // ??? What does this represent
 		
 
 		std::stringstream inputString(line);
@@ -58,3 +55,4 @@ void readFile(CourseLinkedList &tree) { // This will also load the files into a 
 	file.close();
 }
 
+// void appendNode()

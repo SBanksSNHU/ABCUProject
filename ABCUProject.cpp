@@ -2,6 +2,7 @@
 #include "MENU.hpp"
 #include "DSTREE.hpp"
 #include "PARSER.hpp"
+
 int main()
 {
     CourseLinkedList tree;
@@ -10,14 +11,11 @@ int main()
     Menus main(tree);
     std::cout << "Hello, what would you like to do?" << std::endl;
     do {
-        
+        main.resetTextColor();
         main.printMenuOptions();
         main.getUserInput();
         
     } while (main.getRunFlag());
-
-    
-  
 
     return 0;
 }

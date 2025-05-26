@@ -39,7 +39,7 @@ public:
 	void printCourse();		// Print
 	void notFoundFix();		// This should fix the tempNotFound
 	void printAllCourses();
-	void pushNode(CourseNode node);
+	void pushNode(CourseNode &node);
 	std::vector<CourseNode> getAllCourses();
 	//when a new object is created, we need to check and fix tempNotFound
 
