@@ -4,6 +4,19 @@
 #include <string>
 #include "DSTREE.hpp"
 
+enum ConsoleColor {
+	BLACK = 0,
+	BLUE = 1,
+	GREEN = 2,
+	CYAN = 3,
+	RED = 4,
+	MAGENTA = 5,
+	YELLOW = 6,
+	WHITE = 7,
+	BRIGHT = 8
+};
+
+
 class Menus {
 	const std::vector<std::string> menuOptionsString		// Displays options to user
 	{
@@ -41,6 +54,12 @@ public:
 	int getMenuChoice();
 	bool getRunFlag();
 	
+	void clearScreen();
+
+	void changeTextColor(ConsoleColor color);
+
+	void resetTextColor();
+
 	void printMenuOptions();	// Iterate over vector
 
 	

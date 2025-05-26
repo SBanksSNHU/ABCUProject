@@ -79,7 +79,7 @@ CourseNode* CourseLinkedList::search(std::string name) {
 	return nullptr;  // Not found in any root
 }
 
-CourseNode* CourseLinkedList::searchRe(CourseNode* startNode, std::string name) {
+CourseNode* CourseLinkedList::searchRe(CourseNode* startNode, std::string name) { // Recursive presumably 
 	if (startNode->courseID == name) {
 		return startNode;
 	}
@@ -115,13 +115,13 @@ void CourseLinkedList::printCourse() {
 		cout << "Node " << userCourse << " does not exist.\n";
 	}
 
-	//CourseNode* node = search(name);
+
 
 
 }
 
 
-void CourseLinkedList::notFoundFix() {
+void CourseLinkedList::notFoundFix() { // remove element call, function again
 	int pick = 0;
 
 	while (!tempNotFound.empty()) {
@@ -130,7 +130,7 @@ void CourseLinkedList::notFoundFix() {
 		insert(node);
 		
 		
-		// remove element call, function again
+		
 	}
 }
 
@@ -142,9 +142,9 @@ void CourseLinkedList::printAllCourses() {
 }
 
 
-	void CourseLinkedList::pushNode(CourseNode node) {
-		allCourses.push_back(node);
-	}
-	std::vector<CourseNode> CourseLinkedList::getAllCourses() {
-		return allCourses;
-	}
+void CourseLinkedList::pushNode(CourseNode &node) {
+	allCourses.push_back(node);
+}
+std::vector<CourseNode> CourseLinkedList::getAllCourses() {
+	return allCourses;
+}

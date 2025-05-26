@@ -6,27 +6,42 @@
 #include <Windows.h>
 #include "DSTREE.hpp"
 
+	void Menus::clearScreen() {
+		// Clears the output of the console
+		system("cls");
+	}
 
+	void Menus::changeTextColor(ConsoleColor color) {
+		// Changes the text color after this to color
+		HANDLE  hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, color);
 
+	}
+	void Menus::resetTextColor() {
+		// Resets the color back to default (WHITE)
+		HANDLE  hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(hConsole, WHITE);
 
+	 }
 
-
-
- 
-
-	void Menus::printMenuOptions() {
+	void Menus::printMenuOptions() { 
+		changeTextColor(BLUE);
 		for (int i = 0; i < menuSize; i++) {
 			std::cout << i + 1 << ". " << menuOptionsString[i] << std::endl;
 		}
+		resetTextColor();
 	}
 
 	void Menus::getUserInput() {
+		//clearScreen();
+		changeTextColor(YELLOW);
 		std::cin >> userMenuChoice;
 		if (std::cin.fail()) {
 			std::cin.clear();
 			std::cin.ignore(100, '\n');
 			(this->*menuOptions_ptr[4])();
 		}
+
 		else if (userMenuChoice < 0 || userMenuChoice > menuSize) {
 			std::cout << "Invalid input! Please input a valid menu choice." << std::endl;
 			
@@ -34,23 +49,26 @@
 		}
 		else {
 			setMenuChoice(userMenuChoice);
-			if (userMenuChoice) {
-
-			}
 			(this->*menuOptions_ptr[userMenuChoice - 1])(); // https://stackoverflow.com/questions/6586205/what-are-the-pointer-to-member-operators-and-in-c
 
 		}
+
+		resetTextColor();
 	}
 
 
 	void Menus::optionOne() { // Loading files
+		changeTextColor(CYAN);
+		clearScreen();
 		setMenuChoice(1);
 		if (menuDepth > 0) {
 			std::cout << "Anything Else?" << std::endl;
 		}
 		menuDepth++;
 	}
-	void Menus::optionTwo() {
+	void Menus::optionTwo() { // Define what this does 
+		changeTextColor(GREEN);
+		clearScreen();
 		setMenuChoice(2);
 
 		std::vector<CourseNode> nodes = currentTree.getAllCourses();
@@ -63,8 +81,11 @@
 		}
 		
 		menuDepth++;
+		resetTextColor();
 	}
 	void Menus::optionThree() { // Print course and requirements
+		changeTextColor(RED);
+		clearScreen();
 		setMenuChoice(3);
 		currentTree.printCourse();
 
@@ -73,18 +94,23 @@
 		}
 		currentTree.printAllCourses();
 		menuDepth++;
+		resetTextColor();
 	}
 
 	void Menus::optionFour() {
+		changeTextColor(MAGENTA);
+		clearScreen();
 		setMenuChoice(4);
 		std::cout << "Goodbye!" << std::endl;
 		setRunFlag(false);
 		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
 		exit(0);
+		resetTextColor();
 	}
 
 	void Menus::optionNA() { // The case in which a non int was input
+		clearScreen();
 		HANDLE  hConsole;
 		int k;
 
