@@ -71,7 +71,7 @@
 		clearScreen();
 		setMenuChoice(2);
 
-		std::vector<CourseNode> nodes = currentTree.getAllCourses();
+		std::vector<CourseNode> nodes = currentGraph.getAllCourses();
 		if (menuDepth > 0) {
 			std::cout << "Anything Else?" << std::endl;
 		}
@@ -87,12 +87,12 @@
 		changeTextColor(RED);
 		clearScreen();
 		setMenuChoice(3);
-		currentTree.printCourse();
+		currentGraph.printAllCourses();
 
 		if (menuDepth > 0) {
 			std::cout << "Anything Else?" << std::endl;
 		}
-		currentTree.printAllCourses();
+		currentGraph.printAllCourses();
 		menuDepth++;
 		resetTextColor();
 	}

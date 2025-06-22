@@ -6,4 +6,4 @@
 #include <filesystem>
 #include "DSTREE.hpp"
 
-void readFile(CourseLinkedList &tree);
+void readFile(Graph& graph);

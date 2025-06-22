@@ -5,146 +5,108 @@
 using std::cout;
 using std::endl;
 
-int  CourseLinkedList::insert(CourseNode node) {
-	if (node.coursePrerequisites.empty()) {
-		root.push_back(node);
+// Insert
+// Get root
+// Search
+// Search Recursive
+// Print Course
+// Print all courses
+
+
+
+int Graph::insert(std::unique_ptr<CourseNode> node) {
+	if (!node || node->courseID.empty()) {
+		return -1; // Invalid node
 	}
-	else {// if it does have prerequisites
 
-		for (int i = 0; i < node.coursePrerequisites.size(); i++) {
-			int existsCount = 0;
-			bool prerequisiteFound = false;
+	const std::string courseId = node->courseID;
 
-			// Search for the prerequisite node
-			CourseNode* prerequisiteNode = search(node.coursePrerequisites[i]);
-			if (prerequisiteNode) {
-				existsCount++;
-				prerequisiteFound = true;
-				// Append the node as a child to the prerequisite node
-				prerequisiteNode->children.push_back(node);
-			}
-
-			// Handle the case where the prerequisite was not found
-			if (!prerequisiteFound) {
-				tempNotFound.push_back(node);
-			}
-			if (existsCount == node.coursePrerequisites.size()) { // all prerequisites exist
-				for (int i = 0; i < node.coursePrerequisites.size(); i++) {
-					CourseNode* prerequisiteNode = search(node.coursePrerequisites[i]);
-					if (prerequisiteNode) {
-						// Add the current node as a child to the prerequisite node
-						prerequisiteNode->children.push_back(node);
-						return 1;
-					}
-					else { // atleast 1 prerequisite doesn't exist
-						tempNotFound.push_back(node);
-						
-						return 0;
-					}
-				}
-			}
-			
-			// check prerequisites if courses found in tree
-			// if found make them child,
-			// if not found
-
-
-			// Search for every node in 	
-			// // If prerequisites = Null, Root
-		// Search for every prerequisite and store a pointer of it in
-		}
-
+	if (nodes.contains(courseId)) {
+		return -1; // Already exists
 	}
-	
-}
 
-
-CourseNode* CourseLinkedList::getRoot() {
-	return &root[0];
-}
-
-
-//Ok look, this function creates a tree, but a forest is needed
-
-
-CourseNode* CourseLinkedList::search(std::string name) {
-	// Will need to search every root to find value
-	for (int i = 0; i < root.size(); i++) {
-		CourseNode* foundNode = searchRe(&root[i], name);
-		if (foundNode) {
-			return foundNode;  // If found in any root, return it
+	// Check if all prerequisites exist
+	std::vector<std::string> missingPrerequisites;
+	for (const auto& prereq : node->coursePrerequisites) {
+		if (!search(prereq)) {
+			missingPrerequisites.push_back(prereq);
 		}
 	}
 
-	return nullptr;  // Not found in any root
-}
-
-CourseNode* CourseLinkedList::searchRe(CourseNode* startNode, std::string name) { // Recursive presumably 
-	if (startNode->courseID == name) {
-		return startNode;
-	}
-
-	for (int j = 0; j < startNode->children.size(); j++) {
-		CourseNode* foundNode = searchRe(&startNode->children[j], name);
-		if (foundNode) {
-			return foundNode;  // If found in child, return it
-		}
-	}
-
-	return nullptr;  // Not found in this subtree
-}
-
-
-
-void CourseLinkedList::printCourse() {
-	// Search for the node first, assign to value
-	CourseNode* node;
-	std::string userCourse;
-	cout << "What course are you looking for?[ABC-123]" << endl;
-	std::cin >> userCourse;
-	node = search(userCourse);
-	if (node) {
-		cout << "ID: " << node->courseID << "\nName: " << node->courseName <<
-			"\nPrerequisites: ";
-		for (int i = 0; i < node->coursePrerequisites.size(); i++) {
-			cout << node->coursePrerequisites[i] << ", \n";
-		}
-
+	if (missingPrerequisites.empty()) {
+		nodes[courseId] = std::move(node);
+		adjacencyList[courseId] = {};
+		return 1; // Success
 	}
 	else {
-		cout << "Node " << userCourse << " does not exist.\n";
-	}
-
-
-
-
-}
-
-
-void CourseLinkedList::notFoundFix() { // remove element call, function again
-	int pick = 0;
-
-	while (!tempNotFound.empty()) {
-		CourseNode node = tempNotFound.at(pick);
-		tempNotFound.erase(tempNotFound.begin() + pick);
-		insert(node);
-		
-		
-		
+		tempNotFound.push_back(std::move(node));
+		adjacencyList[courseId] = missingPrerequisites;
+		return 0; // Prerequisites unresolved
 	}
 }
 
-std::vector<CourseNode> CourseLinkedList::getNotFound() {
-	return tempNotFound;
+
+CourseNode* Graph::search(const std::string& courseID) {
+	if (courseID.empty()) return nullptr;
+	auto it = nodes.find(courseID);
+	return (it != nodes.end()) ? it->second.get() : nullptr;
 }
-void CourseLinkedList::printAllCourses() {
-	cout << "Upcoming courses:\n";
+
+void Graph::resolveUnresolved() {
+	for (auto it = tempNotFound.begin(); it != tempNotFound.end();) {
+		auto& node = *it;
+
+		// Skip invalid nodes
+		if (!node || node->courseID.empty()) {
+			it = tempNotFound.erase(it);
+			continue;
+		}
+
+		// Check if prerequisites are satisfied
+		bool prerequisitesMet = true;
+		for (const auto& prereq : node->coursePrerequisites) {
+			if (!search(prereq)) {
+				prerequisitesMet = false;
+				break;
+			}
+		}
+
+		if (prerequisitesMet) {
+			// Move the node into the graph
+			std::string courseId = node->courseID;
+			nodes[courseId] = std::move(node);
+			adjacencyList[courseId] = {};
+			it = tempNotFound.erase(it);
+		}
+		else {
+			++it; // Keep in temp list for next attempt
+		}
+	}
 }
 
 
-void CourseLinkedList::pushNode(CourseNode &node) {
-	allCourses.push_back(node);
+void Graph::printAllCourses() {
+	for (const auto& [id, node] : nodes) {
+		std::cout << "Course: " << node->courseName << " (" << id << ")\n";
+		std::cout << "  Prerequisites: ";
+		for (const auto& prereq : adjacencyList[id]) {
+			if (search(prereq)) { // Only print existing prerequisites
+				std::cout << prereq << " ";
+			}
+		}
+		std::cout << "\n";
+	}
 }
-std::vector<CourseNode> CourseLinkedList::getAllCourses() {
-	return allCourses;
+
+std::vector<CourseNode> Graph::getAllCourses() const {
+	std::vector<CourseNode> result;
+	for (const auto& [id, node] : nodes) {
+		if (node && !node->courseID.empty()) {
+			result.push_back(*node); // Safe copy
+		}
+	}
+	return result;
 }
+
+
+

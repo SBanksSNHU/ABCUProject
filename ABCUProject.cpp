@@ -5,17 +5,17 @@
 
 int main()
 {
-    CourseLinkedList tree;
-    readFile(tree);
+    Graph graph;
+    Menus mainMenu(graph);
     
-    Menus main(tree);
+    
     std::cout << "Hello, what would you like to do?" << std::endl;
     do {
-        main.resetTextColor();
-        main.printMenuOptions();
-        main.getUserInput();
+        mainMenu.resetTextColor();
+        mainMenu.printMenuOptions();
+        mainMenu.getUserInput();
         
-    } while (main.getRunFlag());
+    } while (mainMenu.getRunFlag());
 
     return 0;
 }

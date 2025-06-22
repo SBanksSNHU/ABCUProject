@@ -3,6 +3,7 @@
 #include <functional>
 #include <string>
 #include "DSTREE.hpp"
+#include "PARSER.hpp"
 
 enum ConsoleColor {
 	BLACK = 0,
@@ -24,13 +25,13 @@ class Menus {
 		"Print Course List",
 		"Print Course",
 		"Exit"
-	};	
+	};
 	bool runFlag;
 	int menuDepth;				// How deep you are into menus
 	int menuSize;				// Amount of options in the menu
 	int userMenuChoice;			// The user's menu choice
-	CourseLinkedList& currentTree; 
-	
+	Graph& currentGraph;
+
 	// Option three
 
 
@@ -38,8 +39,8 @@ public:
 
 	// Option 9 is VERY SPECIAL because of the gap, so I'll just change it to 4 :)
 
-	
-	
+
+
 	void optionOne();			// Load data structure
 	void optionTwo();			// Printing course list
 	void optionThree();			// Print specified course
@@ -53,7 +54,7 @@ public:
 	// Get 
 	int getMenuChoice();
 	bool getRunFlag();
-	
+
 	void clearScreen();
 
 	void changeTextColor(ConsoleColor color);
@@ -62,25 +63,27 @@ public:
 
 	void printMenuOptions();	// Iterate over vector
 
-	
-	 const std::vector<void (Menus::*)()> menuOptions_ptr //std::vector<std::function<void(Menus*)>>menuOptions_ptr // Function pointers
+
+	const std::vector<void (Menus::*)()> menuOptions_ptr //std::vector<std::function<void(Menus*)>>menuOptions_ptr // Function pointers
 	{
 		&Menus::optionOne,
 		&Menus::optionTwo,
 		&Menus::optionThree,
 		&Menus::optionFour,
 		&Menus::optionNA
-	};	
+	};
 
 	void getUserInput();
 
 
-	Menus(CourseLinkedList& tree) :
-		
-		runFlag(true),
+	Menus(Graph& graph)
+		: runFlag(true),
 		menuDepth(0),
 		menuSize(menuOptionsString.size()),
 		userMenuChoice(0),
-		currentTree(tree) {}
+		currentGraph(graph)
+	{
+		readFile(currentGraph);
+	}
 
 };
